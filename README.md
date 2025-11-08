@@ -41,7 +41,7 @@ This project **codifies 4 patterns** to handle these scenarios, implemented on T
 
 ```bash
 # Clone and test
-git clone https://github.com/YOUR_USERNAME/ai-agent-error-patterns.git
+git clone https://github.com/tanayshah11/ai-agent-error-patterns.git
 cd ai-agent-error-patterns
 pnpm install
 
@@ -401,4 +401,4 @@ Built with [Trigger.dev v4](https://trigger.dev) to demonstrate production-grade
 
 If this helped you build more reliable AI agents, consider giving it a ⭐!
 
-[![Star History Chart](https://api.star-history.com/svg?repos=YOUR_USERNAME/ai-agent-error-patterns&type=Date)](https://star-history.com/#YOUR_USERNAME/ai-agent-error-patterns&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=tanayshah11/ai-agent-error-patterns&type=Date)](https://star-history.com/#tanayshah11/ai-agent-error-patterns&Date)
