@@ -37,4 +37,5 @@ coverage/
 # Misc
 .cache/
 temp/
-tmp/
+tmp/.claude/
+CLAUDE.md
