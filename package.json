@@ -1,0 +1,25 @@
+{
+  "name": "error-handling-patterns-for-agents",
+  "version": "1.0.0",
+  "description": "Trigger.dev example: 4 agent error-handling patterns",
+  "type": "module",
+  "scripts": {
+    "dev": "trigger.dev@latest dev",
+    "build": "trigger.dev@latest build",
+    "deploy": "trigger.dev@latest deploy",
+    "test": "tsx test-standalone.ts all",
+    "test:circuit": "tsx test-standalone.ts circuit-breaker",
+    "test:partial": "tsx test-standalone.ts partial-success",
+    "test:escalation": "tsx test-standalone.ts human-escalation",
+    "test:degradation": "tsx test-standalone.ts graceful-degradation"
+  },
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.0.5"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.0.5",
+    "@types/node": "^20.14.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.5.0"
+  }
+}
