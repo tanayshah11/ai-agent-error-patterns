@@ -17,21 +17,21 @@ Most AI agent tutorials show the **happy path**: LLM responds, task succeeds, ev
 
 This project **codifies 4 patterns** to handle these scenarios, implemented on Trigger.dev v4 with:
 
-✅ **Standalone CLI tests** (no server needed, runs in ~3ms)
-✅ **Production upgrade paths** (Redis, Postgres, real LLMs, Slack, Sentry)
-✅ **Comprehensive docs** (testing, deployment, monitoring, cost analysis)
-✅ **Copy-paste ready** for your own agent workflows
+- ✅ **Standalone CLI tests** (no server needed, runs in ~3ms)
+- ✅ **Production upgrade paths** (Redis, Postgres, real LLMs, Slack, Sentry)
+- ✅ **Comprehensive docs** (testing, deployment, monitoring, cost analysis)
+- ✅ **Copy-paste ready** for your own agent workflows
 
 ---
 
 ## The 4 Patterns
 
-| Pattern | Problem | Solution | Use Case |
-|---------|---------|----------|----------|
-| **🔴 Circuit Breaker** | Upstream service failing repeatedly | Stop trying after N failures, fail fast during cooldown | Prevent wasting $$$ on 1000 failed OpenAI calls |
-| **🟡 Partial Success** | Batch operations where some items fail | Process individually, retry only failures, track per-item results | 100 documents: 95 succeed, 5 fail with reasons |
-| **🟠 Human Escalation** | AI hits edge case it can't resolve | Pause workflow, notify human, resume with token | LLM can't parse ambiguous form → human clarifies |
-| **🟢 Graceful Degradation** | Primary service down or rate-limited | Fall back: GPT-4 → Claude → template response | Maintain 100% uptime, reduce costs during spikes |
+| Pattern                     | Problem                                | Solution                                                          | Use Case                                         |
+| --------------------------- | -------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------ |
+| **🔴 Circuit Breaker**      | Upstream service failing repeatedly    | Stop trying after N failures, fail fast during cooldown           | Prevent wasting $$$ on 1000 failed OpenAI calls  |
+| **🟡 Partial Success**      | Batch operations where some items fail | Process individually, retry only failures, track per-item results | 100 documents: 95 succeed, 5 fail with reasons   |
+| **🟠 Human Escalation**     | AI hits edge case it can't resolve     | Pause workflow, notify human, resume with token                   | LLM can't parse ambiguous form → human clarifies |
+| **🟢 Graceful Degradation** | Primary service down or rate-limited   | Fall back: GPT-4 → Claude → template response                     | Maintain 100% uptime, reduce costs during spikes |
 
 ---
 
@@ -50,6 +50,7 @@ pnpm test
 ```
 
 **Expected output:**
+
 ```
 ✅ Passed: 4/4
 ❌ Failed: 0/4
@@ -66,6 +67,7 @@ pnpm dev
 ```
 
 Trigger tasks via UI:
+
 - `agents.circuit-breaker`
 - `agents.partial-success`
 - `agents.human-escalation`
@@ -88,11 +90,13 @@ Trigger tasks via UI:
 ```
 
 **Test:**
+
 ```bash
 pnpm test:circuit
 ```
 
 **Sample Output:**
+
 ```json
 {
   "ok": false,
@@ -122,11 +126,13 @@ pnpm test:circuit
 ```
 
 **Test:**
+
 ```bash
 pnpm test:partial
 ```
 
 **Sample Output:**
+
 ```json
 {
   "ok": true,
@@ -157,11 +163,13 @@ pnpm test:partial
 ```
 
 **Test:**
+
 ```bash
 pnpm test:escalation
 ```
 
 **Sample Output (Escalation):**
+
 ```json
 {
   "ok": false,
@@ -173,6 +181,7 @@ pnpm test:escalation
 ```
 
 **Sample Output (Resume):**
+
 ```json
 {
   "ok": true,
@@ -197,11 +206,13 @@ pnpm test:escalation
 ```
 
 **Test:**
+
 ```bash
 pnpm test:degradation
 ```
 
 **Sample Output:**
+
 ```json
 {
   "ok": true,
@@ -258,6 +269,7 @@ pnpm test:degradation  # Graceful degradation
 ```
 
 **Why CLI tests?**
+
 - ✅ Runs in ~3ms (perfect for CI/CD)
 - ✅ No Trigger.dev server needed
 - ✅ No external APIs required (mock mode)
@@ -280,17 +292,20 @@ pnpm dev
 Ready to deploy? [PRODUCTION.md](./PRODUCTION.md) includes:
 
 ### Infrastructure Setup
+
 - ✅ Upstash Redis (circuit breaker state)
 - ✅ Neon/Supabase PostgreSQL (idempotency, tokens, audit logs)
 - ✅ Prisma schema (5 models: CircuitBreakerState, EscalationToken, BatchItem, AuditLog, LLMUsage)
 
 ### Integrations
+
 - ✅ OpenAI + Anthropic APIs (real LLM calls)
 - ✅ Slack webhooks (escalation notifications)
 - ✅ Sentry (error tracking)
 - ✅ OpenTelemetry (tracing)
 
 ### Guides
+
 - ✅ Deployment steps
 - ✅ Alerts & runbooks
 - ✅ Performance tuning
@@ -303,23 +318,23 @@ Ready to deploy? [PRODUCTION.md](./PRODUCTION.md) includes:
 
 ## Documentation
 
-| Doc | Purpose |
-|-----|---------|
-| **[README.md](./README.md)** | This file—quick start and overview |
-| **[CLI-TESTING.md](./CLI-TESTING.md)** | Command-line testing, CI/CD integration |
-| **[TESTING.md](./TESTING.md)** | Detailed test scenarios, edge cases, observability |
-| **[PRODUCTION.md](./PRODUCTION.md)** | Full deployment guide with infrastructure |
+| Doc                                    | Purpose                                            |
+| -------------------------------------- | -------------------------------------------------- |
+| **[README.md](./README.md)**           | This file—quick start and overview                 |
+| **[CLI-TESTING.md](./CLI-TESTING.md)** | Command-line testing, CI/CD integration            |
+| **[TESTING.md](./TESTING.md)**         | Detailed test scenarios, edge cases, observability |
+| **[PRODUCTION.md](./PRODUCTION.md)**   | Full deployment guide with infrastructure          |
 
 ---
 
 ## Real-World Use Cases
 
-| Pattern | Scenario | Without | With |
-|---------|----------|---------|------|
-| **Circuit Breaker** | OpenAI API is down | 1000 failed requests, wasted $$$ | Circuit opens after 5 failures, fails fast |
-| **Partial Success** | Process 100 documents, 5 invalid | Entire batch fails | 95 succeed, 5 fail with detailed reasons |
-| **Human Escalation** | LLM can't parse form | Stuck in retry loop | Pauses, notifies human, resumes after fix |
-| **Graceful Degradation** | GPT-4 rate limit hit | All requests fail | Falls back to Claude → template |
+| Pattern                  | Scenario                         | Without                          | With                                       |
+| ------------------------ | -------------------------------- | -------------------------------- | ------------------------------------------ |
+| **Circuit Breaker**      | OpenAI API is down               | 1000 failed requests, wasted $$$ | Circuit opens after 5 failures, fails fast |
+| **Partial Success**      | Process 100 documents, 5 invalid | Entire batch fails               | 95 succeed, 5 fail with detailed reasons   |
+| **Human Escalation**     | LLM can't parse form             | Stuck in retry loop              | Pauses, notifies human, resumes after fix  |
+| **Graceful Degradation** | GPT-4 rate limit hit             | All requests fail                | Falls back to Claude → template            |
 
 ---
 
@@ -348,8 +363,8 @@ jobs:
       - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v3
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: "20"
+          cache: "pnpm"
       - run: pnpm install
       - run: pnpm test
 ```
