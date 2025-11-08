@@ -19,13 +19,17 @@ export const testAllPatterns = task({
     // Test 1: Circuit Breaker
     console.log("1️⃣ Testing Circuit Breaker pattern...");
     try {
-      const cb = await circuitBreaker.run({ calls: 20, cooldownMs: 3000 }, ctx);
-      results.circuitBreaker = {
-        success: true,
-        data: cb,
-        message: "Circuit breaker pattern executed successfully",
-      };
-      console.log("✅ Circuit Breaker: PASSED\n");
+      const cbResult = await circuitBreaker.triggerAndWait({ calls: 20, cooldownMs: 3000 });
+      if (cbResult.ok) {
+        results.circuitBreaker = {
+          success: true,
+          data: cbResult.output,
+          message: "Circuit breaker pattern executed successfully",
+        };
+        console.log("✅ Circuit Breaker: PASSED\n");
+      } else {
+        throw cbResult.error;
+      }
     } catch (e: any) {
       results.circuitBreaker = {
         success: false,
@@ -37,15 +41,19 @@ export const testAllPatterns = task({
     // Test 2: Partial Success
     console.log("2️⃣ Testing Partial Success pattern...");
     try {
-      const ps = await partialSuccess.run({
+      const psResult = await partialSuccess.triggerAndWait({
         items: ["item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8"],
-      }, ctx);
-      results.partialSuccess = {
-        success: true,
-        data: ps,
-        message: "Partial success pattern executed successfully",
-      };
-      console.log("✅ Partial Success: PASSED\n");
+      });
+      if (psResult.ok) {
+        results.partialSuccess = {
+          success: true,
+          data: psResult.output,
+          message: "Partial success pattern executed successfully",
+        };
+        console.log("✅ Partial Success: PASSED\n");
+      } else {
+        throw psResult.error;
+      }
     } catch (e: any) {
       results.partialSuccess = {
         success: false,
@@ -58,18 +66,20 @@ export const testAllPatterns = task({
     if (!payload.skipEscalation) {
       console.log("3️⃣ Testing Human Escalation pattern...");
       try {
-        // First run - should escalate
-        const he1 = await humanEscalation.run({
+        const heResult = await humanEscalation.triggerAndWait({
           data: "Test escalation scenario",
-        }, ctx);
-
-        results.humanEscalation = {
-          success: true,
-          data: he1,
-          message: "Human escalation pattern triggered (manual resume required)",
-          note: "Check dashboard for resumeToken and manually trigger second run",
-        };
-        console.log("✅ Human Escalation: TRIGGERED (requires manual resume)\n");
+        });
+        if (heResult.ok) {
+          results.humanEscalation = {
+            success: true,
+            data: heResult.output,
+            message: "Human escalation pattern triggered (manual resume required)",
+            note: "Check dashboard for resumeToken and manually trigger second run",
+          };
+          console.log("✅ Human Escalation: TRIGGERED (requires manual resume)\n");
+        } else {
+          throw heResult.error;
+        }
       } catch (e: any) {
         results.humanEscalation = {
           success: false,
@@ -85,15 +95,19 @@ export const testAllPatterns = task({
     // Test 4: Graceful Degradation
     console.log("4️⃣ Testing Graceful Degradation pattern...");
     try {
-      const gd = await gracefulDegradation.run({
+      const gdResult = await gracefulDegradation.triggerAndWait({
         prompt: "Summarize the key benefits of error handling in AI agent workflows",
-      }, ctx);
-      results.gracefulDegradation = {
-        success: true,
-        data: gd,
-        message: "Graceful degradation pattern executed successfully",
-      };
-      console.log("✅ Graceful Degradation: PASSED\n");
+      });
+      if (gdResult.ok) {
+        results.gracefulDegradation = {
+          success: true,
+          data: gdResult.output,
+          message: "Graceful degradation pattern executed successfully",
+        };
+        console.log("✅ Graceful Degradation: PASSED\n");
+      } else {
+        throw gdResult.error;
+      }
     } catch (e: any) {
       results.gracefulDegradation = {
         success: false,
