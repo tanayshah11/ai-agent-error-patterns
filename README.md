@@ -1,3 +1,5 @@
+> 📝 **Architecture write-up & engineer's notes:** [tanayshah.dev/projects/ai-agent-error-patterns/](https://tanayshah.dev/projects/ai-agent-error-patterns/) — by [Tanay Shah](https://tanayshah.dev/), AI engineer in NYC.
+
 # Production Error-Handling Patterns for AI Agents
 
 > **Stop your AI agents from failing silently.** Four battle-tested reliability patterns (circuit breaker, partial success, human-in-the-loop, graceful degradation) for Trigger.dev v4 — with tests, docs, and production upgrade paths.
